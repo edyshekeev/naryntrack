@@ -3,9 +3,8 @@ import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import "../styles/map.css"; // Import CSS for fullscreen styling
+import "../styles/map.css";
 
-// Fix missing marker icons
 const customIcon = L.icon({
   iconUrl: "/leaflet/marker-icon.png",
   iconSize: [25, 41],
