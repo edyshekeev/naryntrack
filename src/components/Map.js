@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { useGeolocation } from "@/hooks/useGeolocation";
 
 // Custom marker icon
 const customIcon = L.icon({
@@ -29,19 +30,12 @@ const SetViewToUser = ({ position }) => {
 const Map = () => {
   const [position, setPosition] = useState(null);
 
-  useEffect(() => {
-    if (navigator.geolocation) {
-      const watchId = navigator.geolocation.watchPosition(
-        (pos) => {
-          setPosition([pos.coords.latitude, pos.coords.longitude]);
-        },
-        (error) => console.error("Error getting location:", error),
-        { enableHighAccuracy: true }
-      );
-
-      return () => navigator.geolocation.clearWatch(watchId);
-    }
-  }, []);
+  useGeolocation({
+    callback:
+      (lat, lng) => {
+        setPosition([lat, lng]);
+      }
+  });
 
   return (
     <div className="w-screen h-screen">
