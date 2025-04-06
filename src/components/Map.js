@@ -40,7 +40,7 @@ const Map = () => {
   return (
     <div className="w-screen h-screen">
       <MapContainer
-        center={position || [51.505, -0.09]} // Default center
+        center={position || [41.42692877099885, 75.98208390133429]} // Default center
         zoom={13}
         className="w-full h-full z-0"
       >

@@ -1,4 +1,4 @@
-// hooks/useGeolocation.ts
+"use client";
 import { useEffect } from "react";
 
 export function useGeolocation({ callback = (lat, lng) => { }, init = () => { } }) {
