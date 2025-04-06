@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import "../styles/map.css";
 
+// Custom marker icon
 const customIcon = L.icon({
   iconUrl: "/leaflet/marker-icon.png",
   iconSize: [25, 41],
@@ -14,6 +14,7 @@ const customIcon = L.icon({
   shadowSize: [41, 41],
 });
 
+// Component to center map on user location
 const SetViewToUser = ({ position }) => {
   const map = useMap();
   useEffect(() => {
@@ -43,11 +44,11 @@ const Map = () => {
   }, []);
 
   return (
-    <div className="map-container">
+    <div className="w-screen h-screen">
       <MapContainer
-        center={position || [51.505, -0.09]} // Default: London
+        center={position || [51.505, -0.09]} // Default center
         zoom={13}
-        className="fullscreen-map"
+        className="w-full h-full z-0"
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

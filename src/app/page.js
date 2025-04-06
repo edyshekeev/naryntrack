@@ -1,11 +1,9 @@
-import Map from "./components/Map";
-import "./styles/page.css";
+import MapWrapper from "@/components/MapWrapper";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div>
-      <h1 className="page-title">My Location</h1>
-      <Map />
-    </div>
+    <main className="w-screen h-screen">
+      <MapWrapper />
+    </main>
   );
 }
