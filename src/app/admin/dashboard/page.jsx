@@ -2,36 +2,40 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useGetMe } from '@/hooks/queries/useGetMe';
 
 export default function AdminPage() {
   const router = useRouter();
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingUsers, setLoadingUsers] = useState(true);
   const [error, setError] = useState('');
 
-  // Check if the user is logged in
-  // useEffect(() => {
-  //   const token = localStorage.getItem('authToken'); // Assuming auth token is saved here
-  //   if (!token) {
-  //     router.push('/login');
-  //   } else {
-  //     fetchUsers();
-  //   }
-  // }, [router]);
+  const { data: currentUser, isLoading: loadingUser, isError } = useGetMe();
 
-  // Fetch all users from the API
+  // Redirect to login if not authenticated
+  // useEffect(() => {
+  //   if (!loadingUser && !currentUser) {
+  //     router.push('/login');
+  //   }
+  // }, [currentUser, loadingUser, router]);
+
+  // Fetch all users once authenticated
+  useEffect(() => {
+    if (currentUser) {
+      fetchUsers();
+    }
+  }, [currentUser]);
+
   const fetchUsers = async () => {
     try {
       const response = await fetch('/api/users');
-      if (!response.ok) {
-        throw new Error('Failed to fetch users');
-      }
+      if (!response.ok) throw new Error('Failed to fetch users');
       const data = await response.json();
       setUsers(data);
     } catch (err) {
       setError('Failed to fetch users.');
     } finally {
-      setLoading(false);
+      setLoadingUsers(false);
     }
   };
 
@@ -54,13 +58,8 @@ export default function AdminPage() {
     router.push(`/users/${id}`);
   };
 
-  if (loading) {
-    return <p>Loading users...</p>;
-  }
-
-  if (error) {
-    return <p className="text-red-500">{error}</p>;
-  }
+  if (loadingUser || loadingUsers) return <p>Loading...</p>;
+  if (isError || error) return <p className="text-red-500">{error || 'Unauthorized access'}</p>;
 
   return (
     <div className="container mx-auto my-10">
