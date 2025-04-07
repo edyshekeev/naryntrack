@@ -1,27 +1,36 @@
 "use client";
 import { useEffect } from "react";
 
-export function useGeolocation({ callback = (lat, lng) => { }, init = () => { } }) {
+export function useGeolocation({
+  callback = (lat, lng) => { },
+  init = () => { },
+}) {
   useEffect(() => {
     const close = init();
+    let watchId;
+
     if (!navigator.geolocation) {
       console.error("Geolocation is not supported by this browser.");
       return;
     }
 
-    const watchId = navigator.geolocation.watchPosition(
+    const sendUpdate = (latitude, longitude) => {
+      callback(latitude, longitude);
+    };
+
+    // Start watching for location changes
+    watchId = navigator.geolocation.watchPosition(
       (pos) => {
         const { latitude, longitude } = pos.coords;
-        callback(latitude, longitude);
+        sendUpdate(latitude, longitude);
       },
-      (error) => console.error("Error getting location:", error),
+      (error) => console.error("Error watching location:", error),
       { enableHighAccuracy: true }
     );
 
     return () => {
-      if (close)
-        close();
-      return navigator.geolocation.clearWatch(watchId)
+      if (close) close();
+      if (watchId) navigator.geolocation.clearWatch(watchId);
     };
   }, [callback]);
 }

@@ -27,7 +27,7 @@ const SetViewToUser = ({ position }) => {
   return null;
 };
 
-const Map = () => {
+const Map = ({ positions = [] }) => {
   const [position, setPosition] = useState(null);
 
   useGeolocation({
@@ -50,10 +50,15 @@ const Map = () => {
         />
         {position && (
           <>
-            <SetViewToUser position={position} />
-            <Marker position={position} icon={customIcon}>
+            {/* <SetViewToUser position={position} /> */}
+            {/* <Marker key="1aslkdfjasl" position={position} icon={customIcon}>
               <Popup>You are here</Popup>
-            </Marker>
+            </Marker> */}
+            {positions?.length && positions.map((position, i) =>
+              <Marker key="1aslkdfjasl" position={position} icon={customIcon}>
+                <Popup>{`${i+1}`}</Popup>
+              </Marker>)
+            }
           </>
         )}
       </MapContainer>

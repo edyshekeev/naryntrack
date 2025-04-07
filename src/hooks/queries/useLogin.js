@@ -12,7 +12,6 @@ export const useLogin = ({ onSuccess }) => {
     mutationFn: loginUser,
     onSuccess: (data) => {
       localStorage.setItem('authToken', data.access_token);
-      onSuccess(data); // delegate redirect to caller
     },
     onError: (error) => {
       console.error('Login failed:', error);
