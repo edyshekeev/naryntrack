@@ -2,21 +2,35 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import { useGetMe } from '@/hooks/queries/useGetMe';
 
 export default function EditUserPage() {
+  const router = useRouter();
+  const params = useParams();
+  const { id } = params;
+
+  // Auth check
+  const { data: currentUser, isLoading: authLoading, isError: authError } = useGetMe();
+
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [busNumber, setBusNumber] = useState('');
   const [error, setError] = useState('');
-  const router = useRouter();
-  const params = useParams();
-  const { id } = params;
 
+  // Redirect to login if not authenticated
+  // useEffect(() => {
+  //   if (!authLoading && authError) {
+  //     router.push('/login');
+  //   }
+  // }, [authLoading, authError, router]);
+
+  // Fetch user to edit
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const res = await fetch(`/api/users/${id}`);
+        if (!res.ok) throw new Error('Failed to fetch user');
         const data = await res.json();
 
         setUser(data);
@@ -28,8 +42,10 @@ export default function EditUserPage() {
       }
     };
 
-    fetchUser();
-  }, [id]);
+    if (!authLoading && !authError) {
+      fetchUser();
+    }
+  }, [id, authLoading, authError]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -62,7 +78,7 @@ export default function EditUserPage() {
     }
   };
 
-  if (!user) {
+  if (authLoading || !user) {
     return <div className="text-center py-10">Loading...</div>;
   }
 
