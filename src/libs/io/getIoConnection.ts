@@ -1,11 +1,11 @@
 import { WS_API } from '@/config';
-import { io } from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 
-const get_socketio = (query) => {
+const get_socketio = (query: any): Socket => {
     // console.log({ device, token, a, b, direction });
     return io(`${WS_API}`, {
         transports: ['websocket'],
-        query
+        query: query
     })
 }
 
