@@ -7,7 +7,7 @@ const loginUser = async (credentials) => {
   return response.data;
 };
 
-export const useLogin = () => {
+export const useLogin = ({ onSuccess }) => {
   return useMutation({
     mutationFn: loginUser,
     onSuccess: (data) => {
@@ -15,6 +15,6 @@ export const useLogin = () => {
     },
     onError: (error) => {
       console.error('Login failed:', error);
-    }
+    },
   });
 };
