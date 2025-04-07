@@ -16,16 +16,16 @@ const customIcon = L.icon({
 });
 
 // Component to center map on user location
-const SetViewToUser = ({ position }) => {
-  const map = useMap();
-  useEffect(() => {
-    if (position) {
-      map.setView(position, map.getZoom());
-    }
-  }, [position, map]);
+// const SetViewToUser = ({ position }) => {
+//   const map = useMap();
+//   useEffect(() => {
+//     if (position) {
+//       map.setView(position, map.getZoom());
+//     }
+//   }, [position, map]);
 
-  return null;
-};
+//   return null;
+// };
 
 const Map = ({ positions = [] }) => {
   const [position, setPosition] = useState(null);

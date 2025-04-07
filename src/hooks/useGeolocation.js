@@ -7,7 +7,6 @@ export function useGeolocation({
 }) {
   useEffect(() => {
     const close = init();
-    let watchId;
 
     if (!navigator.geolocation) {
       console.error("Geolocation is not supported by this browser.");
@@ -19,7 +18,7 @@ export function useGeolocation({
     };
 
     // Start watching for location changes
-    watchId = navigator.geolocation.watchPosition(
+    const watchId = navigator.geolocation.watchPosition(
       (pos) => {
         const { latitude, longitude } = pos.coords;
         sendUpdate(latitude, longitude);
