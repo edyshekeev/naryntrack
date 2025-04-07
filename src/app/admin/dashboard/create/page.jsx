@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useCreateUser } from '@/hooks/queries/createUser';
 
 export default function CreateUserPage() {
   const [username, setUsername] = useState('');
@@ -10,7 +11,9 @@ export default function CreateUserPage() {
   const [error, setError] = useState('');
   const router = useRouter();
 
-  const handleSubmit = async (e) => {
+  const { mutate, isPending } = useCreateUser();
+
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!username || !password || busNumber === '') {
@@ -18,27 +21,13 @@ export default function CreateUserPage() {
       return;
     }
 
-    try {
-      const res = await fetch('/api/users', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          username,
-          password,
-          bus_number: parseInt(busNumber),
-        }),
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        setError(data.error || 'Failed to create user.');
-        return;
+    mutate(
+      { username, password, busNumber },
+      {
+        onSuccess: () => router.push('/users'),
+        onError: (err) => setError(err.message),
       }
-
-      router.push('/users');
-    } catch (err) {
-      setError('Something went wrong.');
-    }
+    );
   };
 
   return (
@@ -93,9 +82,10 @@ export default function CreateUserPage() {
 
           <button
             type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded"
+            disabled={isPending}
+            className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded disabled:opacity-50"
           >
-            Create
+            {isPending ? 'Creating...' : 'Create'}
           </button>
         </div>
       </form>

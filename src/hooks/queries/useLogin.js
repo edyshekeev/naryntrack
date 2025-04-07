@@ -7,14 +7,15 @@ const loginUser = async (credentials) => {
   return response.data;
 };
 
-export const useLogin = () => {
+export const useLogin = ({ onSuccess }) => {
   return useMutation({
     mutationFn: loginUser,
     onSuccess: (data) => {
-      localStorage.setItem('authToken', data.token);
+      localStorage.setItem('authToken', data.access_token);
+      onSuccess(data); // delegate redirect to caller
     },
     onError: (error) => {
       console.error('Login failed:', error);
-    }
+    },
   });
 };

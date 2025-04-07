@@ -1,51 +1,26 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import { useGetMe } from '@/hooks/queries/useGetMe';
+import { useGetUsers } from '@/hooks/queries/useGetUsers';
 
 export default function AdminPage() {
   const router = useRouter();
-  const [users, setUsers] = useState([]);
-  const [loadingUsers, setLoadingUsers] = useState(true);
-  const [error, setError] = useState('');
-
-  const { data: currentUser, isLoading: loadingUser, isError } = useGetMe();
-
-  // Redirect to login if not authenticated
-  // useEffect(() => {
-  //   if (!loadingUser && !currentUser) {
-  //     router.push('/login');
-  //   }
-  // }, [currentUser, loadingUser, router]);
-
-  // Fetch all users once authenticated
-  useEffect(() => {
-    if (currentUser) {
-      fetchUsers();
-    }
-  }, [currentUser]);
-
-  const fetchUsers = async () => {
-    try {
-      const response = await fetch('/api/users');
-      if (!response.ok) throw new Error('Failed to fetch users');
-      const data = await response.json();
-      setUsers(data);
-    } catch (err) {
-      setError('Failed to fetch users.');
-    } finally {
-      setLoadingUsers(false);
-    }
-  };
+  const { data: currentUser, isLoading: loadingUser, isError: authError } = useGetMe();
+  const {
+    data: users = [],
+    isLoading: loadingUsers,
+    isError: userFetchError,
+    refetch,
+  } = useGetUsers(!!currentUser); // Only fetch if authenticated
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`/api/users/${id}`, {
+      const response = await fetch(`/users/${id}`, {
         method: 'DELETE',
       });
       if (response.ok) {
-        setUsers(users.filter((user) => user.id !== id));
+        await refetch();
       } else {
         alert('Error deleting user');
       }
@@ -59,7 +34,7 @@ export default function AdminPage() {
   };
 
   if (loadingUser || loadingUsers) return <p>Loading...</p>;
-  if (isError || error) return <p className="text-red-500">{error || 'Unauthorized access'}</p>;
+  if (authError || userFetchError) return <p className="text-red-500">Unauthorized or failed to fetch users</p>;
 
   return (
     <div className="container mx-auto my-10">
