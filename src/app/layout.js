@@ -1,3 +1,4 @@
+import QueryProvider from "@/providers/QueryProvider";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css"
 
@@ -16,11 +17,14 @@ export const metadata = {
   description: "Website for locating buses in Naryn city",
 };
 
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+        <QueryProvider >
+          {children}
+        </QueryProvider>
       </body>
     </html>
   );
