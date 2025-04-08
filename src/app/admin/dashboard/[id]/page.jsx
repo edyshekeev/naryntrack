@@ -5,13 +5,22 @@ import { useRouter, useParams } from 'next/navigation';
 import { useGetMe } from '@/hooks/queries/useGetMe';
 import { useForm } from 'react-hook-form';
 import { useGetUserById } from '@/hooks/queries/useGetUserById';
+import { useUpdateUser } from '@/hooks/queries/usePatchUser';
 
 export default function EditUserPage() {
   const router = useRouter();
   const params = useParams();
 
   const { data, isLoading } = useGetUserById({ userId: params.id })
-
+  const { mutate: updateUser } = useUpdateUser({
+    onSuccess: () => {
+      router.push('/admin/dashboard')
+      window.location.reload();
+    },
+    onError: (error) => {
+      console.error("Error updating user:", error);
+    }
+  });
   const {
     register,
     handleSubmit,
@@ -19,10 +28,11 @@ export default function EditUserPage() {
     reset,
     formState: { errors },
   } = useForm();
+
   useEffect(() => { reset(data) }, [data])
 
   const onSubmit = async (data) => {
-
+    updateUser({ userId: params.id, data })
   };
 
   if (isLoading) {

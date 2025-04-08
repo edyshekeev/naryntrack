@@ -9,19 +9,17 @@ const ProtectedRoute = ({ children }) => {
   const router = useRouter();
   const { data: user, isLoading } = useGetMe();
   useEffect(() => {
-    console.log(user);
     if (!user) {
       router.push('/admin/login');
     } else {
       if (!user.is_password_changed) {
         router.push("/admin/changepassword")
+        return
       }
-      else {
-        if (user.is_admin)
-          router.push("/admin/dashboard")
-        else
-          router.push("/admin/driver")
-      }
+      if (user.is_admin)
+        router.push("/admin/dashboard")
+      else
+        router.push("/admin/driver")
     }
   }, [user, router]);
 
