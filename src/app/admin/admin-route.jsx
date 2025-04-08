@@ -8,12 +8,20 @@ import { useGetMe } from '@/hooks/queries/useGetMe';
 const ProtectedRoute = ({ children }) => {
   const router = useRouter();
   const { data: user, isLoading } = useGetMe();
-  console.log(user)
   useEffect(() => {
+    console.log(user);
     if (!user) {
       router.push('/admin/login');
-    }else{
-      router.push("/admin/dashboard")
+    } else {
+      if (!user.is_password_changed) {
+        router.push("/admin/changepassword")
+      }
+      else {
+        if (user.is_admin)
+          router.push("/admin/dashboard")
+        else
+          router.push("/admin/driver")
+      }
     }
   }, [user, router]);
 

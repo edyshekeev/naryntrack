@@ -7,11 +7,13 @@ const loginUser = async (credentials) => {
   return response.data;
 };
 
-export const useLogin = ({ onSuccess }) => {
+export const useLogin = (router) => {
   return useMutation({
     mutationFn: loginUser,
     onSuccess: (data) => {
       localStorage.setItem('authToken', data.access_token);
+      router.push("/admin")
+      window.location.reload();
     },
     onError: (error) => {
       console.error('Login failed:', error);

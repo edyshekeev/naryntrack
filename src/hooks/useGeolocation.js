@@ -16,10 +16,12 @@ export function useGeolocation({
     const sendUpdate = (latitude, longitude) => {
       callback(latitude, longitude);
     };
+    console.log("watch geolocation");
 
     // Start watching for location changes
     const watchId = navigator.geolocation.watchPosition(
       (pos) => {
+
         const { latitude, longitude } = pos.coords;
         sendUpdate(latitude, longitude);
       },
@@ -31,5 +33,5 @@ export function useGeolocation({
       if (close) close();
       if (watchId) navigator.geolocation.clearWatch(watchId);
     };
-  }, [callback]);
+  }, []);
 }

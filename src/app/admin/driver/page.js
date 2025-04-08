@@ -10,7 +10,7 @@ const DriverPage = () => {
     useGeolocation({
         init: () => {
             conn.current = get_socketio({
-                token: "token"
+                token: localStorage.getItem("authToken")
             })
             return () => conn.current.disconnect();
         },

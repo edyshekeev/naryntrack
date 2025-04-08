@@ -1,28 +1,17 @@
 // src/api/users/createUser.js
+import axiosInstance from '@/libs/axios/axiosInstance';
 import { useMutation } from '@tanstack/react-query';
 
-const createUserRequest = async ({ username, password, busNumber }) => {
-  const res = await fetch('/api/users', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      username,
-      password,
-      bus_number: parseInt(busNumber),
-    }),
-  });
+const createUserRequest = async (data) => {
+  const res = await axiosInstance.post("/users/", data)
 
-  const data = await res.json();
-
-  if (!res.ok) {
-    throw new Error(data.error || 'Failed to create user.');
-  }
-
-  return data;
+  return res.data;
 };
 
-export const useCreateUser = () => {
+export const useCreateUser = ({ onSuccess, onError }) => {
   return useMutation({
     mutationFn: createUserRequest,
+    onSuccess,
+    onError
   });
 };

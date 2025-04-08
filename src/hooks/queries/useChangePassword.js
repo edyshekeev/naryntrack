@@ -1,10 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
 import axiosInstance from '@/libs/axios/axiosInstance';
 
-const changePassword = async ({ newPassword }) => {
-  const response = await axiosInstance.post('/changepassword', {
-    new_password: newPassword,
-  });
+const changePassword = async (data) => {
+  const response = await axiosInstance.post('/change_password',
+    data,
+  );
   return response.data;
 };
 

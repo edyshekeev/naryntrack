@@ -1,9 +1,9 @@
+import axiosInstance from '@/libs/axios/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
 
 const fetchUsers = async () => {
-  const response = await fetch('/api/users');
-  if (!response.ok) throw new Error('Failed to fetch users');
-  return response.json();
+  const response = await axiosInstance.get("/users/");
+  return response.data;
 };
 
 export const useGetUsers = (enabled = true) => {
@@ -11,7 +11,9 @@ export const useGetUsers = (enabled = true) => {
     queryKey: ['users'],
     queryFn: fetchUsers,
     enabled,
-    staleTime: 1000 * 60 * 5, // cache for 5 mins
     retry: false,
+    staleTime: 1000 * 60 * 5, // cache for 5 mins
   });
 };
+
+

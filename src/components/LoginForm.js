@@ -7,17 +7,7 @@ export default function LoginForm() {
   const { register, handleSubmit } = useForm();
   const router = useRouter();
 
-  const { mutate, isLoading, isError } = useLogin({
-    onSuccess: (data) => {
-      localStorage.setItem('authToken', data.token);
-
-      if (data.is_password_changed === false) {
-        router.push('/admin/changepassword');
-      } else {
-        router.push('/admin');
-      }
-    },
-  });
+  const { mutate, isLoading, isError } = useLogin(router);
 
   const onSubmit = (formData) => {
     mutate(formData);

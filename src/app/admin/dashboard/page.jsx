@@ -1,76 +1,114 @@
 'use client';
-
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useGetMe } from '@/hooks/queries/useGetMe';
 import { useGetUsers } from '@/hooks/queries/useGetUsers';
+import { useDeleteUser } from '@/hooks/queries/useDeleteUser';
 
 export default function AdminPage() {
   const router = useRouter();
-  const { data: currentUser, isLoading: loadingUser, isError: authError } = useGetMe();
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
+  const {
+    data: currentUser,
+    isLoading: loadingUser,
+    isError: authError,
+  } = useGetMe();
+
   const {
     data: users = [],
     isLoading: loadingUsers,
     isError: userFetchError,
     refetch,
-  } = useGetUsers(!!currentUser); // Only fetch if authenticated
+  } = useGetUsers();
 
-  const handleDelete = async (id) => {
-    try {
-      const response = await fetch(`/users/${id}`, {
-        method: 'DELETE',
-      });
-      if (response.ok) {
-        await refetch();
-      } else {
-        alert('Error deleting user');
-      }
-    } catch (error) {
-      alert('Error deleting user');
-    }
-  };
+  const {
+    mutate: deleteUser,
+    isLoading: loadingDeleted
+  } = useDeleteUser();
 
   const handleEdit = (id) => {
-    router.push(`/users/${id}`);
+    router.push(`dashboard/${id}`);
   };
 
-  if (loadingUser || loadingUsers) return <p>Loading...</p>;
-  if (authError || userFetchError) return <p className="text-red-500">Unauthorized or failed to fetch users</p>;
+  const handleAddUser = () => {
+    router.push('dashboard/create');
+  };
+
+  const handleDelete = (id) => {
+    deleteUser(id, {
+      onSuccess: () => refetch()
+    });
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    router.push('/admin');
+    window.location.reload();
+  };
+
+  if (!isHydrated || loadingUser || loadingUsers || loadingDeleted)
+    return <p>Loading...</p>;
 
   return (
-    <div className="container mx-auto my-10">
-      <h1 className="text-3xl font-bold mb-4">Admin Panel - User Management</h1>
+    <div className="container mx-auto px-4 py-10">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-4xl font-bold text-gray-800">Admin Panel</h1>
+        <div className="flex gap-4">
+          <button
+            onClick={handleAddUser}
+            className="bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-2 rounded-lg shadow-md transition"
+          >
+            + Add New User
+          </button>
+          <button
+            onClick={handleLogout}
+            className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-6 py-2 rounded-lg shadow-md transition"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
 
-      <table className="table-auto w-full border-collapse">
-        <thead>
-          <tr>
-            <th className="border p-2">Username</th>
-            <th className="border p-2">Bus Number</th>
-            <th className="border p-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user.id}>
-              <td className="border p-2">{user.username}</td>
-              <td className="border p-2">{user.bus_number}</td>
-              <td className="border p-2">
-                <button
-                  onClick={() => handleEdit(user.id)}
-                  className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(user.id)}
-                  className="bg-red-500 text-white px-4 py-2 rounded"
-                >
-                  Delete
-                </button>
-              </td>
+      <div className="overflow-x-auto bg-white rounded-xl shadow-md">
+        <table className="min-w-full divide-y divide-gray-200 text-sm">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="px-6 py-3 text-left font-medium text-gray-700 uppercase tracking-wider">Username</th>
+              <th className="px-6 py-3 text-left font-medium text-gray-700 uppercase tracking-wider">Bus Number</th>
+              <th className="px-6 py-3 text-left font-medium text-gray-700 uppercase tracking-wider">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {users.map((user) => (
+              <tr key={user?.id} className="hover:bg-gray-50 transition">
+                <td className="px-6 py-4 text-gray-800">{user?.username}</td>
+                <td className="px-6 py-4 text-gray-800">{user?.car_number}</td>
+                <td className="px-6 py-4">
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => handleEdit(user?.id)}
+                      className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow-sm transition"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(user?.id)}
+                      className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg shadow-sm transition"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

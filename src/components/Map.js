@@ -16,25 +16,25 @@ const customIcon = L.icon({
 });
 
 // Component to center map on user location
-// const SetViewToUser = ({ position }) => {
-//   const map = useMap();
-//   useEffect(() => {
-//     if (position) {
-//       map.setView(position, map.getZoom());
-//     }
-//   }, [position, map]);
+const SetViewToUser = ({ position }) => {
+  const map = useMap();
+  useEffect(() => {
+    if (position) {
+      map.setView(position, map.getZoom());
+    }
+  }, [position, map]);
 
-//   return null;
-// };
+  return null;
+};
 
 const Map = ({ positions = [] }) => {
   const [position, setPosition] = useState(null);
-
+  const updateGelocation = (lat, lng) => {
+    setPosition([lat, lng]);
+  }
   useGeolocation({
-    callback:
-      (lat, lng) => {
-        setPosition([lat, lng]);
-      }
+    callback: updateGelocation
+
   });
 
   return (
@@ -50,13 +50,13 @@ const Map = ({ positions = [] }) => {
         />
         {position && (
           <>
-            {/* <SetViewToUser position={position} /> */}
+            <SetViewToUser position={position} />
             {/* <Marker key="1aslkdfjasl" position={position} icon={customIcon}>
               <Popup>You are here</Popup>
             </Marker> */}
             {positions?.length && positions.map((position, i) =>
-              <Marker key="1aslkdfjasl" position={position} icon={customIcon}>
-                <Popup>{`${i+1}`}</Popup>
+              <Marker key={i} position={position} icon={customIcon}>
+                <Popup>{position.number}</Popup>
               </Marker>)
             }
           </>
