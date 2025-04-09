@@ -33,7 +33,7 @@ const DriverPage = () => {
                 className="absolute bottom-6 z-[1000] w-[80%] right-[50%] translate-x-1/2 -translate-y-1/2 border-2 bg-white px-4 py-2 rounded shadow-md hover:bg-gray-100"
                 onClick={() => setStarted(prev => !prev)}
             >
-                {started ? "Stop" : "Start"}
+                {started ? "Стоп" : "Старт"}
             </button>
         } />
 

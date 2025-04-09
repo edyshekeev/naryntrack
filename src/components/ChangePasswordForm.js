@@ -16,7 +16,7 @@ export default function ChangePasswordForm({ }) {
       window.location.reload();
     },
     onError: (error) => {
-      setErrorMessage(error?.response?.data?.message || 'Failed to change password');
+      setErrorMessage(error?.response?.data?.message || 'Не удалось поменять пароль');
     },
   });
 
@@ -27,7 +27,7 @@ export default function ChangePasswordForm({ }) {
       changePassword(data)
     }
     else {
-      setErrorMessage("New passwords are not matched")
+      setErrorMessage("Пароли не совпадают")
     }
   }
 
@@ -35,32 +35,32 @@ export default function ChangePasswordForm({ }) {
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
       {errorMessage && <p className="text-red-600 text-sm">{errorMessage}</p>}
       <div>
-        <label className="block text-sm font-medium mb-1">Old password</label>
+        <label className="block text-sm font-medium mb-1">Старый пароль</label>
         <input
           {...register('old_password', { required: true })}
           type="password"
           className="w-full px-3 py-2 border rounded focus:outline-none"
-          placeholder="Enter old password"
+          placeholder="Введите старый пароль"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1">New Password</label>
+        <label className="block text-sm font-medium mb-1">Новый пароль</label>
         <input
           {...register('new_password', { required: true })}
           type="password"
           className="w-full px-3 py-2 border rounded focus:outline-none"
-          placeholder="Enter new password"
+          placeholder="Введите новый пароль"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1">Confirm new password</label>
+        <label className="block text-sm font-medium mb-1">Подтвердите новый пароль</label>
         <input
           {...register('confirm_new_password', { required: true })}
           type="password"
           className="w-full px-3 py-2 border rounded focus:outline-none"
-          placeholder="Enter new password"
+          placeholder="Введите новый пароль"
         />
       </div>
 
@@ -71,7 +71,7 @@ export default function ChangePasswordForm({ }) {
         disabled={isLoading}
         className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded transition disabled:opacity-50"
       >
-        {isLoading ? 'Changing...' : 'Change Password'}
+        {isLoading ? 'Меняем пароль...' : 'Смена пароля'}
       </button>
     </form>
   );

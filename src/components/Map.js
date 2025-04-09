@@ -33,7 +33,7 @@ const AutopositionButton = ({ onClick, isPointing }) => {
       onClick={onClick}
       className="absolute top-4 right-4 z-[1000] bg-white p-2 rounded shadow hover:bg-gray-100"
     >
-      {isPointing ? "📍 Unpin on Me" : "📍 Pin on Me"}
+      {isPointing ? "📍 Закрепить на мне" : "📍 Открепить от меня"}
     </button>
   );
 };
@@ -64,7 +64,7 @@ const Map = ({ positions = [], isClient = false, innerComponent }) => {
           <>
             {isPointing && <SetViewToUser position={position} />}
             <Marker key="current" position={position} icon={customIcon}>
-              <Popup>{isClient ? "You are here" : "You are driving here"}</Popup>
+              <Popup>{isClient ? "Вы здесь" : "Вы едете здесь"}</Popup>
             </Marker>
           </>
         )}

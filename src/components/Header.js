@@ -14,7 +14,7 @@ const Header = () => {
         <header className="bg-white shadow-md px-6 py-4 flex justify-between items-center">
             <Link href={user.is_admin ? "/admin/dashboard" : "/admin/driver"}>
                 <h1 className="text-xl font-bold text-gray-800">
-                    Dashboard
+                    Панель управления
                 </h1>
             </Link>
             <nav className="space-x-4">
@@ -22,13 +22,13 @@ const Header = () => {
                     href="/admin/changepassword"
                     className="text-gray-700 hover:text-blue-600 transition"
                 >
-                    Change Password
+                    Смена пароля
                 </Link>
                 <button
                     onClick={handleLogout}
                     className="text-red-600 hover:text-red-800 transition"
                 >
-                    Logout
+                    Выйти
                 </button>
             </nav>
         </header >
