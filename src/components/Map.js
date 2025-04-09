@@ -16,8 +16,8 @@ const customIcon = L.icon({
 });
 
 const driverIcon = L.icon({
-  iconUrl: "bus-icon-svgrepo-com.svg",
-  iconSize: [25, 41],
+  iconUrl: "/bus-icon-svgrepo-com.svg",
+  iconSize: [41, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   shadowUrl: "/leaflet/marker-shadow.png",
@@ -42,7 +42,7 @@ const AutopositionButton = ({ onClick, isPointing }) => {
       onClick={onClick}
       className="absolute top-4 right-4 z-[1000] bg-white p-2 rounded shadow hover:bg-gray-100"
     >
-      {isPointing ? "📍 Закрепить на мне" : "📍 Открепить от меня"}
+      {isPointing ? "📍 Открепить от меня" : "📍 Закрепить на мне"}
     </button>
   );
 };
