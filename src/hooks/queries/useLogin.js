@@ -16,7 +16,7 @@ export const useLogin = (router) => {
       window.location.reload();
     },
     onError: (error) => {
-      console.error('Login failed:', error);
+      console.error('Не удалось войти', error);
     },
   });
 };

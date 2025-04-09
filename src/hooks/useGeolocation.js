@@ -11,14 +11,14 @@ export function useGeolocation({
       const close = init();
 
       if (!navigator.geolocation) {
-        console.error("Geolocation is not supported by this browser.");
+        console.error("Этот браузер не поддерживает геолокацию");
         return;
       }
 
       const sendUpdate = (latitude, longitude) => {
         callback(latitude, longitude);
       };
-      console.log("watch geolocation");
+      console.log("Смотреть геолокацию");
 
       // Start watching for location changes
       const watchId = navigator.geolocation.watchPosition(
@@ -27,7 +27,7 @@ export function useGeolocation({
           const { latitude, longitude } = pos.coords;
           sendUpdate(latitude, longitude);
         },
-        (error) => console.error("Error watching location:", error),
+        (error) => console.error("Ошибка при просмотре локации", error),
         { enableHighAccuracy: true }
       );
 

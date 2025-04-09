@@ -25,7 +25,7 @@ export const useGetMe = () => {
     },
     onError: (err) => {
       useUserStore.getState().clearUser();
-      console.error('Failed to fetch user info:', err);
+      console.error('Не удалось получить информацию о пользователе', err);
     },
   });
 };
