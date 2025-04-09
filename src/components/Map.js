@@ -15,6 +15,15 @@ const customIcon = L.icon({
   shadowSize: [41, 41],
 });
 
+const driverIcon = L.icon({
+  iconUrl: "bus-icon-svgrepo-com.svg",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowUrl: "/leaflet/marker-shadow.png",
+  shadowSize: [41, 41],
+});
+
 // Component to center map on user location
 const SetViewToUser = ({ position }) => {
   const map = useMap();
@@ -63,14 +72,14 @@ const Map = ({ positions = [], isClient = false, innerComponent }) => {
         {(position) && (
           <>
             {isPointing && <SetViewToUser position={position} />}
-            <Marker key="current" position={position} icon={customIcon}>
+            <Marker key="current" position={position} icon={isClient ? customIcon : driverIcon}>
               <Popup>{isClient ? "Вы здесь" : "Вы едете здесь"}</Popup>
             </Marker>
           </>
         )}
         {positions?.length > 0 &&
           positions.map((pos, i) => (
-            <Marker key={i} position={pos} icon={customIcon}>
+            <Marker key={i} position={pos} icon={driverIcon}>
               <Popup>{pos.number}</Popup>
             </Marker>
           ))}
